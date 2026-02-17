@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Wallet,
@@ -10,6 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -26,6 +27,8 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -62,13 +65,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </nav>
 
         <div className="p-3 border-t border-sidebar-border">
-          <Link
-            to="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors"
+          <button
+            onClick={async () => { await signOut(); navigate("/"); }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors w-full"
           >
             <LogOut className="w-5 h-5" />
             Sign Out
-          </Link>
+          </button>
         </div>
       </aside>
 
