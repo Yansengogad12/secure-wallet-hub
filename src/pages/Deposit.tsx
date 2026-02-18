@@ -3,8 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const paymentMethods = [
   { id: "mtn", name: "MTN Mobile Money", color: "bg-warning" },
@@ -15,23 +17,44 @@ const Deposit = () => {
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState("mtn");
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleDeposit = (e: React.FormEvent) => {
+  const handleDeposit = async (e: React.FormEvent) => {
     e.preventDefault();
     const numAmount = Number(amount);
     if (numAmount < 6000 || numAmount > 5000000) {
-      toast({
-        title: "Invalid amount",
-        description: "Deposit must be between 6,000 and 5,000,000 RWF.",
-        variant: "destructive",
-      });
+      toast({ title: "Invalid amount", description: "Deposit must be between 6,000 and 5,000,000 RWF.", variant: "destructive" });
       return;
     }
-    toast({
-      title: "Deposit requires backend",
-      description: "Enable Lovable Cloud to process deposits.",
-    });
+    const trimmedPhone = phone.trim();
+    if (!trimmedPhone || trimmedPhone.length < 10) {
+      toast({ title: "Invalid phone", description: "Please enter a valid phone number.", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("create_deposit", {
+        p_amount: numAmount,
+        p_phone: trimmedPhone,
+        p_payment_method: method,
+      });
+      if (error) throw error;
+      const result = data as any;
+      toast({
+        title: result.success ? "Deposit Successful!" : "Deposit Failed",
+        description: result.message || result.error,
+        variant: result.success ? "default" : "destructive",
+      });
+      if (result.success) {
+        setAmount("");
+        setPhone("");
+      }
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,8 +110,9 @@ const Deposit = () => {
                   Minimum: 6,000 RWF · Maximum: 5,000,000 RWF
                 </p>
               </div>
-              <Button type="submit" variant="hero" className="w-full" size="lg">
-                Deposit Now
+              <Button type="submit" variant="hero" className="w-full" size="lg" disabled={loading}>
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {loading ? "Processing..." : "Deposit Now"}
               </Button>
             </form>
           </CardContent>

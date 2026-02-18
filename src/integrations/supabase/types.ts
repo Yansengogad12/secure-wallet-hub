@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      deposits: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          payment_method: string
+          phone: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          payment_method?: string
+          phone: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_method?: string
+          phone?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bonus_balance: number
@@ -106,6 +139,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_deposit: {
+        Args: { p_amount: number; p_payment_method: string; p_phone: string }
+        Returns: Json
+      }
       purchase_product: {
         Args: {
           p_daily_return: number
