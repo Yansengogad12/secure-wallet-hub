@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingBag, TrendingUp } from "lucide-react";
+import { ShoppingBag, TrendingUp, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const products = [
   {
@@ -67,12 +69,29 @@ const formatRWF = (n: number) => n.toLocaleString("en-RW") + " RWF";
 
 const Marketplace = () => {
   const { toast } = useToast();
+  const [loadingId, setLoadingId] = useState<number | null>(null);
 
-  const handlePurchase = (productName: string) => {
-    toast({
-      title: "Purchase requires backend",
-      description: `Enable Lovable Cloud to buy "${productName}".`,
-    });
+  const handlePurchase = async (product: typeof products[0]) => {
+    setLoadingId(product.id);
+    try {
+      const { data, error } = await supabase.rpc("purchase_product", {
+        p_product_name: product.name,
+        p_product_price: product.price,
+        p_daily_return: product.dailyReturn,
+        p_total_return: product.totalReturn,
+      });
+      if (error) throw error;
+      const result = data as any;
+      toast({
+        title: result.success ? "Purchase Successful!" : "Purchase Failed",
+        description: result.success ? result.message : result.error,
+        variant: result.success ? "default" : "destructive",
+      });
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+    } finally {
+      setLoadingId(null);
+    }
   };
 
   return (
@@ -120,9 +139,11 @@ const Marketplace = () => {
                   <Button
                     variant="hero"
                     className="w-full"
-                    onClick={() => handlePurchase(product.name)}
+                    disabled={loadingId === product.id}
+                    onClick={() => handlePurchase(product)}
                   >
-                    <ShoppingBag className="w-4 h-4" />
+                    {loadingId === product.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
+                    {loadingId === product.id ? "Processing..." : "Purchase"}
                     Purchase
                   </Button>
                 </CardContent>
