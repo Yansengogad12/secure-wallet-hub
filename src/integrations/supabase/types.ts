@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      commissions: {
+        Row: {
+          amount: number
+          created_at: string
+          from_user_id: string
+          id: string
+          purchase_id: string | null
+          rate: number
+          status: string
+          tier: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          from_user_id: string
+          id?: string
+          purchase_id?: string | null
+          rate: number
+          status?: string
+          tier: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          purchase_id?: string | null
+          rate?: number
+          status?: string
+          tier?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       deposits: {
         Row: {
           amount: number
@@ -134,6 +173,51 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          created_at: string
+          id: string
+          referred_id: string
+          referrer_id: string
+          tier: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referred_id: string
+          referrer_id: string
+          tier: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referred_id?: string
+          referrer_id?: string
+          tier?: number
+        }
+        Relationships: []
+      }
       withdrawals: {
         Row: {
           amount: number
@@ -186,6 +270,7 @@ export type Database = {
         Args: { p_amount: number; p_payment_method: string; p_phone: string }
         Returns: Json
       }
+      generate_referral_code: { Args: never; Returns: string }
       purchase_product: {
         Args: {
           p_daily_return: number

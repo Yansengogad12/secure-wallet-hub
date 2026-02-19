@@ -5,6 +5,7 @@ import {
   ShoppingBag,
   ArrowDownCircle,
   ArrowUpCircle,
+  Users,
   Settings,
   TrendingUp,
   LogOut,
@@ -18,6 +19,7 @@ const navItems = [
   { icon: ShoppingBag, label: "Marketplace", path: "/dashboard/marketplace" },
   { icon: ArrowDownCircle, label: "Deposit", path: "/dashboard/deposit" },
   { icon: ArrowUpCircle, label: "Withdraw", path: "/dashboard/withdraw" },
+  { icon: Users, label: "Team", path: "/dashboard/team" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 
