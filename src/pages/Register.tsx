@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ fullName: "", phone: "", email: "", password: "" });
+  const [form, setForm] = useState({ fullName: "", phone: "", email: "", password: "", referralCode: "" });
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const Register = () => {
       email: form.email,
       password: form.password,
       options: {
-        data: { full_name: form.fullName, phone: form.phone },
+        data: { full_name: form.fullName, phone: form.phone, referral_code: form.referralCode || undefined },
         emailRedirectTo: window.location.origin,
       },
     });
@@ -67,6 +67,10 @@ const Register = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <Input id="email" type="email" placeholder="you@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="referralCode">Referral Code <span className="text-muted-foreground font-normal">(optional)</span></Label>
+                <Input id="referralCode" placeholder="Enter referral code if you have one" value={form.referralCode} onChange={(e) => setForm({ ...form, referralCode: e.target.value.toUpperCase() })} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
