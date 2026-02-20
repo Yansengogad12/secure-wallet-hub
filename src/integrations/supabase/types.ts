@@ -280,6 +280,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_approve_deposit: { Args: { p_deposit_id: string }; Returns: Json }
+      admin_approve_withdrawal: {
+        Args: { p_withdrawal_id: string }
+        Returns: Json
+      }
+      admin_reject_deposit: { Args: { p_deposit_id: string }; Returns: Json }
+      admin_reject_withdrawal: {
+        Args: { p_withdrawal_id: string }
+        Returns: Json
+      }
       create_deposit: {
         Args: { p_amount: number; p_payment_method: string; p_phone: string }
         Returns: Json
@@ -289,6 +299,13 @@ export type Database = {
         Returns: Json
       }
       generate_referral_code: { Args: never; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       purchase_product: {
         Args: {
           p_daily_return: number
