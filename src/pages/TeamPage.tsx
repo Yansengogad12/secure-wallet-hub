@@ -35,10 +35,14 @@ const TeamPage = () => {
     setLoading(false);
   };
 
-  const copyCode = () => {
-    navigator.clipboard.writeText(referralCode);
+  const referralLink = referralCode
+    ? `${window.location.origin}/register?ref=${referralCode}`
+    : "";
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(referralLink);
     setCopied(true);
-    toast({ title: "Copied!", description: "Referral code copied to clipboard." });
+    toast({ title: "Copied!", description: "Referral link copied to clipboard." });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -60,15 +64,23 @@ const TeamPage = () => {
         {/* Referral Code Card */}
         <Card className="border-primary/20 bg-primary/5">
           <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex flex-col gap-4">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Your Referral Code</p>
                 <p className="text-3xl font-bold tracking-widest text-primary">{referralCode || "..."}</p>
               </div>
-              <Button onClick={copyCode} variant="outline" className="gap-2">
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? "Copied" : "Copy Code"}
-              </Button>
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Your Referral Link</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-muted rounded-lg px-3 py-2 text-sm text-foreground truncate select-all">
+                    {referralLink || "..."}
+                  </div>
+                  <Button onClick={copyLink} variant="outline" className="gap-2 shrink-0">
+                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {copied ? "Copied" : "Copy Link"}
+                  </Button>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
