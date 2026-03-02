@@ -5,6 +5,7 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   ShoppingBag,
+  Package,
   TrendingUp,
   LogOut,
   Shield,
@@ -18,6 +19,7 @@ const navItems = [
   { icon: ArrowDownCircle, label: "Deposits", path: "/admin/deposits" },
   { icon: ArrowUpCircle, label: "Withdrawals", path: "/admin/withdrawals" },
   { icon: ShoppingBag, label: "Contracts", path: "/admin/contracts" },
+  { icon: Package, label: "Products", path: "/admin/products" },
 ];
 
 interface AdminLayoutProps {
