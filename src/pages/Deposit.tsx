@@ -87,9 +87,17 @@ const Deposit = () => {
               ))}
             </div>
 
+            <div className="p-4 rounded-lg bg-muted/50 border border-border mb-4">
+              <p className="text-sm font-medium text-foreground mb-1">Send payment to:</p>
+              <p className="text-base font-bold text-primary">
+                {method === "mtn" ? "0782508118" : "0792111176"}
+              </p>
+              <p className="text-sm text-muted-foreground">Gad YANKURIJE</p>
+            </div>
+
             <form onSubmit={handleDeposit} className="space-y-4">
               <div className="space-y-2">
-                <Label>Phone Number</Label>
+                <Label>Your Phone Number</Label>
                 <Input
                   placeholder="+250 7XX XXX XXX"
                   value={phone}
