@@ -46,15 +46,13 @@ const TeamPage = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareWhatsApp = () => {
-    const text = encodeURIComponent(`Join me and start earning! Use my referral link: ${referralLink}`);
-    window.open(`https://wa.me/?text=${text}`, "_blank");
-  };
+  const whatsAppUrl = referralLink
+    ? `https://wa.me/?text=${encodeURIComponent(`Join me and start earning! Use my referral link: ${referralLink}`)}`
+    : "#";
 
-  const shareSMS = () => {
-    const text = encodeURIComponent(`Join me and start earning! Use my referral link: ${referralLink}`);
-    window.open(`sms:?body=${text}`, "_blank");
-  };
+  const smsUrl = referralLink
+    ? `sms:?body=${encodeURIComponent(`Join me and start earning! Use my referral link: ${referralLink}`)}`
+    : "#";
 
   const totalCommissions = commissions.reduce((s, c) => s + Number(c.amount), 0);
   const creditedCommissions = commissions.filter(c => c.status === "credited").reduce((s, c) => s + Number(c.amount), 0);
@@ -89,14 +87,18 @@ const TeamPage = () => {
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {copied ? "Copied" : "Copy"}
                   </Button>
-                  <Button onClick={shareWhatsApp} variant="outline" className="gap-2 shrink-0 text-green-600 border-green-600 hover:bg-green-50">
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp
-                  </Button>
-                  <Button onClick={shareSMS} variant="outline" className="gap-2 shrink-0">
-                    <Phone className="w-4 h-4" />
-                    SMS
-                  </Button>
+                  <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="gap-2 shrink-0 text-green-600 border-green-600 hover:bg-green-50">
+                      <MessageCircle className="w-4 h-4" />
+                      WhatsApp
+                    </Button>
+                  </a>
+                  <a href={smsUrl}>
+                    <Button variant="outline" className="gap-2 shrink-0">
+                      <Phone className="w-4 h-4" />
+                      SMS
+                    </Button>
+                  </a>
                 </div>
               </div>
             </div>
