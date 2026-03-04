@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Copy, Users, TrendingUp, DollarSign, Check } from "lucide-react";
+import { Copy, Users, TrendingUp, DollarSign, Check, MessageCircle, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -46,6 +46,16 @@ const TeamPage = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const shareWhatsApp = () => {
+    const text = encodeURIComponent(`Join me and start earning! Use my referral link: ${referralLink}`);
+    window.open(`https://wa.me/?text=${text}`, "_blank");
+  };
+
+  const shareSMS = () => {
+    const text = encodeURIComponent(`Join me and start earning! Use my referral link: ${referralLink}`);
+    window.open(`sms:?body=${text}`, "_blank");
+  };
+
   const totalCommissions = commissions.reduce((s, c) => s + Number(c.amount), 0);
   const creditedCommissions = commissions.filter(c => c.status === "credited").reduce((s, c) => s + Number(c.amount), 0);
   const pendingCommissions = commissions.filter(c => c.status === "pending").reduce((s, c) => s + Number(c.amount), 0);
@@ -77,7 +87,15 @@ const TeamPage = () => {
                   </div>
                   <Button onClick={copyLink} variant="outline" className="gap-2 shrink-0">
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {copied ? "Copied" : "Copy Link"}
+                    {copied ? "Copied" : "Copy"}
+                  </Button>
+                  <Button onClick={shareWhatsApp} variant="outline" className="gap-2 shrink-0 text-green-600 border-green-600 hover:bg-green-50">
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </Button>
+                  <Button onClick={shareSMS} variant="outline" className="gap-2 shrink-0">
+                    <Phone className="w-4 h-4" />
+                    SMS
                   </Button>
                 </div>
               </div>
